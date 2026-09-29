@@ -1,0 +1,56 @@
+{
+  "tests": [
+    {
+      "name": "bonsai2_text_generation",
+      "input": {
+        "prompt": "Reply with exactly: Bonsai 2 is running",
+        "max_tokens": 256,
+        "reasoning_effort": "medium"
+      },
+      "timeout": 900000
+    },
+    {
+      "name": "bonsai2_chat_messages",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with one short sentence confirming that the chat-completions handler works."
+          }
+        ],
+        "max_tokens": 256,
+        "reasoning_effort": "medium"
+      },
+      "timeout": 900000
+    }
+  ],
+  "config": {
+    "gpuTypeId": "NVIDIA GeForce RTX 4090",
+    "gpuCount": 1,
+    "env": [
+      {
+        "key": "MODEL_FILE",
+        "value": "Ternary-Bonsai-2-27B-PTQ1_0.gguf"
+      },
+      {
+        "key": "CONTEXT_SIZE",
+        "value": "16384"
+      },
+      {
+        "key": "DEFAULT_MAX_TOKENS",
+        "value": "4096"
+      },
+      {
+        "key": "DEFAULT_REASONING_EFFORT",
+        "value": "medium"
+      }
+    ],
+    "allowedCudaVersions": [
+      "12.8",
+      "12.7",
+      "12.6",
+      "12.5",
+      "12.4"
+    ]
+  }
+}
