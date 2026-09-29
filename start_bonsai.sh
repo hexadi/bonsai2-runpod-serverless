@@ -9,7 +9,6 @@ MODEL_PATH="${MODEL_DIR}/${MODEL_FILE}"
 CONTEXT_SIZE="${CONTEXT_SIZE:-32768}"
 GPU_LAYERS="${GPU_LAYERS:-99}"
 PARALLEL="${PARALLEL:-1}"
-CACHE_RAM_MB="${CACHE_RAM_MB:-24576}"
 SERVER_HOST="${SERVER_HOST:-127.0.0.1}"
 SERVER_PORT="${SERVER_PORT:-8080}"
 
@@ -36,6 +35,7 @@ PY
 fi
 
 echo "[bonsai] Starting llama-server with ${MODEL_FILE}"
+export LD_LIBRARY_PATH="/opt/prism/bin${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 exec /opt/prism/bin/llama-server \
   -m "${MODEL_PATH}" \
@@ -44,7 +44,6 @@ exec /opt/prism/bin/llama-server \
   -ngl "${GPU_LAYERS}" \
   -c "${CONTEXT_SIZE}" \
   -np "${PARALLEL}" \
-  --cache-ram "${CACHE_RAM_MB}" \
   -fa on \
   --jinja \
   --temp 1.0 \
