@@ -5,12 +5,13 @@ on:
     branches: [main]
     paths:
       - ".runpod/release-trigger"
+      - ".github/workflows/publish-release.yml"
   workflow_dispatch:
     inputs:
       version:
         description: "Release tag"
         required: true
-        default: "v0.1.1"
+        default: "v0.1.2"
 
 permissions:
   contents: write
@@ -24,10 +25,21 @@ jobs:
         with:
           ref: main
 
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="$(tr -d '[:space:]' < .runpod/release-trigger)"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub release targeting main
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ inputs.version || 'v0.1.1' }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           if gh release view "$VERSION" >/dev/null 2>&1; then
             echo "Release $VERSION already exists."
@@ -45,4 +57,4 @@ jobs:
           - Optional PQ2_0 preset
           - RunPod Serverless handler
           - RunPod Hub configuration and validation tests
-          - Release target fixed to the main branch for RunPod Hub cloning"
+          - CUDA driver-stub link fix for container builds"
