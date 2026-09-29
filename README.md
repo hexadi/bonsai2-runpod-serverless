@@ -1,4 +1,4 @@
-# Bonsai 2 27B on RunPod Serverless
+# Bonsai 2 27B on RunPod Serverless\n\n[![Runpod](https://api.runpod.io/badge/hexadi/bonsai2-runpod-serverless)](https://console.runpod.io/hub/listing/hexadi/bonsai2-runpod-serverless)
 
 Run **PrismML Bonsai 2 27B** on RunPod Serverless using the PrismML `llama.cpp` fork and its OpenAI-compatible chat-completions server.
 
