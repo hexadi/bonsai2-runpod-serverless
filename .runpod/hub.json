@@ -1,0 +1,115 @@
+{
+  "title": "Bonsai 2 27B Serverless",
+  "description": "Run PrismML Bonsai 2 27B on RunPod Serverless with the PrismML llama.cpp CUDA runtime and OpenAI-compatible chat-completions payloads.",
+  "type": "serverless",
+  "category": "language",
+  "config": {
+    "runsOn": "GPU",
+    "containerDiskInGb": 20,
+    "gpuCount": 1,
+    "gpuIds": "ADA_24,AMPERE_24",
+    "allowedCudaVersions": [
+      "12.8",
+      "12.7",
+      "12.6",
+      "12.5",
+      "12.4"
+    ],
+    "presets": [
+      {
+        "name": "Balanced (PTQ1_0)",
+        "defaults": {
+          "MODEL_FILE": "Ternary-Bonsai-2-27B-PTQ1_0.gguf",
+          "CONTEXT_SIZE": 32768,
+          "DEFAULT_MAX_TOKENS": 16384,
+          "DEFAULT_REASONING_EFFORT": "medium"
+        }
+      },
+      {
+        "name": "Performance (PQ2_0)",
+        "defaults": {
+          "MODEL_FILE": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+          "CONTEXT_SIZE": 32768,
+          "DEFAULT_MAX_TOKENS": 16384,
+          "DEFAULT_REASONING_EFFORT": "medium"
+        }
+      }
+    ],
+    "env": [
+      {
+        "key": "MODEL_REPO",
+        "value": "prism-ml/Ternary-Bonsai-2-27B-gguf"
+      },
+      {
+        "key": "MODEL_FILE",
+        "input": {
+          "name": "Model packing",
+          "type": "string",
+          "description": "PTQ1_0 uses less storage/VRAM; PQ2_0 can provide higher prompt-processing performance on some GPUs.",
+          "options": [
+            {
+              "label": "PTQ1_0 (smaller)",
+              "value": "Ternary-Bonsai-2-27B-PTQ1_0.gguf"
+            },
+            {
+              "label": "PQ2_0 (performance)",
+              "value": "Ternary-Bonsai-2-27B-PQ2_0.gguf"
+            }
+          ],
+          "default": "Ternary-Bonsai-2-27B-PTQ1_0.gguf"
+        }
+      },
+      {
+        "key": "CONTEXT_SIZE",
+        "input": {
+          "name": "Context size",
+          "type": "number",
+          "description": "Maximum llama.cpp context size. Larger values require more memory.",
+          "min": 4096,
+          "max": 131072,
+          "default": 32768,
+          "advanced": true
+        }
+      },
+      {
+        "key": "DEFAULT_MAX_TOKENS",
+        "input": {
+          "name": "Default max output tokens",
+          "type": "number",
+          "description": "Default generation limit when max_tokens is omitted from a request.",
+          "min": 256,
+          "max": 32768,
+          "default": 16384,
+          "advanced": true
+        }
+      },
+      {
+        "key": "DEFAULT_REASONING_EFFORT",
+        "input": {
+          "name": "Reasoning effort",
+          "type": "string",
+          "description": "Default Bonsai 2 reasoning effort for requests that do not specify one.",
+          "options": [
+            {
+              "label": "Medium",
+              "value": "medium"
+            },
+            {
+              "label": "Extra high",
+              "value": "xhigh"
+            }
+          ],
+          "default": "medium"
+        }
+      },
+      {
+        "key": "GPU_LAYERS",
+        "value": "99"
+      },
+      {
+        "key": "PARALLEL",
+        "value": "1"
+      }
+    ]
+  }
+}
