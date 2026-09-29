@@ -1,11 +1,12 @@
 name: Publish RunPod Hub Release
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/publish-release.yml"
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag"
+        required: true
+        default: "v0.1.1"
 
 permissions:
   contents: write
@@ -14,25 +15,30 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - name: Create v0.1.0 release
+      - name: Create GitHub release targeting main
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
         run: |
-          if gh release view v0.1.0 >/dev/null 2>&1; then
-            echo "Release v0.1.0 already exists."
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "Release $VERSION already exists."
             exit 0
           fi
 
-          gh release create v0.1.0             --target "${GITHUB_SHA}"             --title "v0.1.0 — Bonsai 2 27B RunPod Serverless"             --notes "Initial RunPod Hub release for Bonsai 2 27B Serverless.
+          gh release create "$VERSION" \
+            --target main \
+            --title "$VERSION — Bonsai 2 27B RunPod Serverless" \
+            --notes "RunPod Hub release for Bonsai 2 27B Serverless.
 
           Includes:
           - PrismML llama.cpp CUDA runtime
           - PTQ1_0 default model packing
           - Optional PQ2_0 preset
           - RunPod Serverless handler
-          - RunPod Hub configuration
-          - Hub validation tests
-          - RunPod README badge"
+          - RunPod Hub configuration and validation tests
+          - Release target fixed to the main branch for RunPod Hub cloning"
